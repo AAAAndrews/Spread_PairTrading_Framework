@@ -1,0 +1,49 @@
+{
+    "run_timestamp": "20251102_180742",
+    "model_parameters": {
+        "model_type": "gradient_boosting",
+        "task": "regression",
+        "n_estimators": 500,
+        "max_depth": 8,
+        "learning_rate": 0.1,
+        "random_state": 42,
+        "scaler_used": true,
+        "feature_count": 50
+    },
+    "signal_parameters": {
+        "use_rolling_quantile": true,
+        "rolling_window": 250,
+        "upper_quantile": 0.9,
+        "lower_quantile": 0.1,
+        "signal_holding_days": 10,
+        "use_probability": true
+    },
+    "backtest_parameters": {
+        "initial_capital": 1000000,
+        "commission_rate": 0.0005,
+        "slippage_rate": 0.0001,
+        "max_position": 100000,
+        "max_capital_usage": 0.1
+    },
+    "data_information": {
+        "start_date": "2000-01-01",
+        "end_date": "2025-11-02",
+        "symbols": [
+            "CL",
+            "RBOB",
+            "HO"
+        ],
+        "spread_type": "CRACK_3_2_1",
+        "train_samples": 5275,
+        "test_samples": 932,
+        "train_period": "2001-01-30 05:00:00 to 2022-02-02 05:00:00",
+        "test_period": "2022-02-03 05:00:00 to 2025-10-17 04:00:00",
+        "total_features": 50,
+        "feature_categories": {
+            "spread_features": 34,
+            "price_features": 12,
+            "technical_features": 5,
+            "macro_features": 2
+        }
+    }
+}
