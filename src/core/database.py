@@ -16,22 +16,47 @@ logger = logging.getLogger(__name__)
 class DatabaseManager:
     """数据库管理类"""
     
-    def __init__(self, db_path: str = "trading_data.db"):
+    def __init__(self, db_path: str = "trading_data.db", timeout: float = 30.0):
         """
         初始化数据库管理器
         
         Args:
             db_path: 数据库文件路径
+            timeout: 数据库锁定超时时间（秒）
         """
         self.db_path = db_path
+        self.timeout = timeout
         self.conn = None
         self._initialize_database()
     
     def _initialize_database(self):
         """初始化数据库，创建必要的表"""
-        self.conn = sqlite3.connect(self.db_path, check_same_thread=False)
-        self._create_tables()
-        logger.info(f"数据库已初始化: {self.db_path}")
+        try:
+            # ✅ 增加超时时间，使用推荐设置
+            self.conn = sqlite3.connect(
+                self.db_path,
+                timeout=self.timeout,
+                check_same_thread=False,
+                isolation_level=None  # 自动提交模式
+            )
+            
+            # ✅ 应用推荐的PRAGMA设置
+            self.conn.execute("PRAGMA journal_mode = WAL")  # Write-Ahead Logging
+            self.conn.execute("PRAGMA synchronous = NORMAL")  # 平衡性能和安全
+            self.conn.execute("PRAGMA cache_size = -64000")  # 64MB缓存
+            self.conn.execute("PRAGMA temp_store = MEMORY")  # 临时表使用内存
+            self.conn.execute(f"PRAGMA busy_timeout = {int(self.timeout * 1000)}")  # 毫秒
+            
+            self._create_tables()
+            logger.info(f"数据库已初始化: {self.db_path} (timeout={self.timeout}s)")
+            
+        except sqlite3.OperationalError as e:
+            logger.error(f"❌ 数据库初始化失败: {e}")
+            logger.error("可能的解决方案:")
+            logger.error("1. 关闭所有使用数据库的程序")
+            logger.error("2. 删除 .wal、.shm、.journal 临时文件")
+            logger.error("3. 运行: python scripts/fix_database_lock.py")
+            raise
     
     def _create_tables(self):
         """创建数据表"""

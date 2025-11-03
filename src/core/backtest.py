@@ -108,14 +108,32 @@ class BacktestEngine:
         
         Returns:
             考虑滑点后的价格
+        
+        注意：对于负价格，滑点的方向与正价格相反
+        - 买入负价格资产时，价格应该更负（绝对值更大）
+        - 卖出负价格资产时，价格应该更正（绝对值更小）
         """
-        if action == 'buy':
-            return price * (1 + self.slippage_rate)
-        else:  # sell
-            return price * (1 - self.slippage_rate)
+        if price >= 0:
+            # 正价格的标准处理
+            if action == 'buy':
+                return price * (1 + self.slippage_rate)
+            else:  # sell
+                return price * (1 - self.slippage_rate)
+        else:
+            # 负价格的特殊处理：滑点方向相反
+            if action == 'buy':
+                # 买入负价格资产，价格变得更负（对买方不利）
+                return price * (1 + self.slippage_rate)  # 例如：-10 * 1.0001 = -10.001
+            else:  # sell
+                # 卖出负价格资产，价格变得更正（对卖方不利）
+                return price * (1 - self.slippage_rate)  # 例如：-10 * 0.9999 = -9.999
     
     def calculate_commission(self, price: float, quantity: int) -> float:
-        """计算手续费"""
+        """
+        计算手续费
+        
+        注意：无论价格正负，手续费始终基于交易金额的绝对值
+        """
         return abs(price * quantity * self.commission_rate)
     
     def calculate_margin_required(self, price: float, quantity: int) -> float:
@@ -123,7 +141,7 @@ class BacktestEngine:
         计算所需保证金
         
         Args:
-            price: 合约价格
+            price: 合约价格（可以为负）
             quantity: 合约数量（绝对值）
         
         Returns:
@@ -132,6 +150,8 @@ class BacktestEngine:
         公式：
             保证金 = |合约价值| × 保证金比例
             合约价值 = 价格 × 数量
+        
+        注意：对于负价格，保证金基于价格的绝对值计算
         """
         contract_value = abs(price * quantity)
         margin = contract_value * self.margin_ratio
@@ -165,10 +185,17 @@ class BacktestEngine:
         # 计算当前浮动盈亏
         if self.position > 0:  # 多头
             unrealized_pnl = (current_price - self.entry_price) * self.position
-            price_change_pct = (current_price - self.entry_price) / self.entry_price
+            # 对于负价格，价格变化百分比的计算需要特殊处理
+            if self.entry_price != 0:
+                price_change_pct = (current_price - self.entry_price) / abs(self.entry_price)
+            else:
+                price_change_pct = 0
         else:  # 空头
             unrealized_pnl = (self.entry_price - current_price) * abs(self.position)
-            price_change_pct = (self.entry_price - current_price) / self.entry_price
+            if self.entry_price != 0:
+                price_change_pct = (self.entry_price - current_price) / abs(self.entry_price)
+            else:
+                price_change_pct = 0
         
         # 检查百分比止损
         if self.stop_loss_pct > 0:
@@ -214,8 +241,13 @@ class BacktestEngine:
             → 最大合约 = 800万 / 70 = 114,285手
             → 如果max_position=100，则实际最大100手
             → 所需保证金 = 100 × 70 × 0.1 = 700美元
+        
+        注意：支持负价格交易（如某些价差策略中的负价差）
         """
-        if price <= 0:
+        # 对于负价格，使用绝对值计算合约数量
+        abs_price = abs(price)
+        
+        if abs_price == 0:
             return 0
         
         # 可用于开仓的资金
@@ -227,8 +259,8 @@ class BacktestEngine:
         # 考虑杠杆：实际可控制价值 = 可用资金 × 杠杆倍数
         max_contract_value = available_for_trading * self.leverage
         
-        # 转换为合约数量
-        max_contracts = int(max_contract_value / price)
+        # 转换为合约数量（使用价格的绝对值）
+        max_contracts = int(max_contract_value / abs_price)
         
         # 不超过持仓限制
         return min(max_contracts, self.max_position)
@@ -391,6 +423,10 @@ class BacktestEngine:
         # 保证金占用率
         margin_usage_rate = self.margin_used / self.initial_capital if self.initial_capital > 0 else 0.0
         
+        # 杠杆率计算（使用价格绝对值）
+        position_value = abs(self.position * current_price)
+        leverage_ratio = position_value / total_equity if total_equity > 0 else 0.0
+        
         # 记录权益
         self.equity_curve.append({
             'timestamp': timestamp,
@@ -400,7 +436,7 @@ class BacktestEngine:
             'unrealized_pnl': unrealized_pnl,
             'margin_usage_rate': margin_usage_rate,
             'position': self.position,
-            'leverage_ratio': abs(self.position * current_price) / total_equity if total_equity > 0 else 0.0
+            'leverage_ratio': leverage_ratio
         })
         
         # 计算收益率

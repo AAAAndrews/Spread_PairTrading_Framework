@@ -1,0 +1,257 @@
+{
+    "selected_features": [
+        "JM_volume_ma_20",
+        "J_volume_ma_20",
+        "RB_close",
+        "J_ma_5",
+        "J_ma_10",
+        "J_ma_20",
+        "J_ma_50",
+        "JM_ma_5",
+        "JM_ma_10",
+        "JM_ma_20",
+        "JM_ma_50",
+        "coke_warehouse_receipt",
+        "coking_coal_warehouse_receipt",
+        "bohai_port_inventory",
+        "bohai_port_inventory_ma20",
+        "coke_warehouse_receipt_ma20",
+        "coking_coal_warehouse_receipt_ma20",
+        "spread_max_60",
+        "spread_max",
+        "spread_max_20",
+        "spread_max_10",
+        "spread_max_5",
+        "spread",
+        "spread_min_60",
+        "spread_ma_5",
+        "spread_min_5",
+        "spread_ma_10",
+        "spread_min_10",
+        "spread_min",
+        "spread_min_20",
+        "spread_ema_12",
+        "spread_mean",
+        "spread_ma_20",
+        "spread_ema_26",
+        "spread_ma_60",
+        "spread_diff_20d",
+        "spread_diff_10d",
+        "distance_to_low",
+        "distance_to_high",
+        "spread_diff_5d",
+        "spread_std_60",
+        "spread_std",
+        "spread_std_20",
+        "spread_diff_1d",
+        "spread_percentile",
+        "spread_std_10",
+        "spread_macd",
+        "bohai_port_rail_inflow",
+        "bohai_port_rail_inflow_ma20",
+        "spread_return_20d"
+    ],
+    "feature_count": 50,
+    "feature_importance": [
+        {
+            "feature": "spread_std_60",
+            "importance": 0.06846643177265281
+        },
+        {
+            "feature": "spread_ma_60",
+            "importance": 0.06530007168460693
+        },
+        {
+            "feature": "bohai_port_inventory_ma20",
+            "importance": 0.05137807664263454
+        },
+        {
+            "feature": "spread_macd",
+            "importance": 0.04123726392481829
+        },
+        {
+            "feature": "distance_to_high",
+            "importance": 0.03632694535821437
+        },
+        {
+            "feature": "J_ma_50",
+            "importance": 0.035252749585957664
+        },
+        {
+            "feature": "J_volume_ma_20",
+            "importance": 0.032621571078875373
+        },
+        {
+            "feature": "J_ma_20",
+            "importance": 0.03225945094159672
+        },
+        {
+            "feature": "JM_volume_ma_20",
+            "importance": 0.03012586265315652
+        },
+        {
+            "feature": "bohai_port_rail_inflow_ma20",
+            "importance": 0.02945467196436599
+        },
+        {
+            "feature": "spread_return_20d",
+            "importance": 0.02898665037351315
+        },
+        {
+            "feature": "spread_diff_1d",
+            "importance": 0.028130287681882294
+        },
+        {
+            "feature": "spread_std_10",
+            "importance": 0.02789820171561876
+        },
+        {
+            "feature": "bohai_port_inventory",
+            "importance": 0.02733206620057088
+        },
+        {
+            "feature": "spread_max_10",
+            "importance": 0.023512929746119512
+        },
+        {
+            "feature": "spread_diff_10d",
+            "importance": 0.022706901356036844
+        },
+        {
+            "feature": "spread_diff_5d",
+            "importance": 0.022656691276829663
+        },
+        {
+            "feature": "spread",
+            "importance": 0.022550902991561893
+        },
+        {
+            "feature": "JM_ma_50",
+            "importance": 0.022543691590892357
+        },
+        {
+            "feature": "coke_warehouse_receipt_ma20",
+            "importance": 0.02244619412957961
+        },
+        {
+            "feature": "spread_diff_20d",
+            "importance": 0.021255381866876057
+        },
+        {
+            "feature": "JM_ma_5",
+            "importance": 0.021062702377126947
+        },
+        {
+            "feature": "RB_close",
+            "importance": 0.02037831338709542
+        },
+        {
+            "feature": "JM_ma_20",
+            "importance": 0.017991541919529674
+        },
+        {
+            "feature": "coke_warehouse_receipt",
+            "importance": 0.017823610381511566
+        },
+        {
+            "feature": "spread_max_60",
+            "importance": 0.01699499126590376
+        },
+        {
+            "feature": "spread_std_20",
+            "importance": 0.01656338819236124
+        },
+        {
+            "feature": "coking_coal_warehouse_receipt_ma20",
+            "importance": 0.01608850532537449
+        },
+        {
+            "feature": "spread_min_60",
+            "importance": 0.015373586957775633
+        },
+        {
+            "feature": "JM_ma_10",
+            "importance": 0.014643734576538793
+        },
+        {
+            "feature": "distance_to_low",
+            "importance": 0.014298814120869712
+        },
+        {
+            "feature": "J_ma_5",
+            "importance": 0.011349759418129034
+        },
+        {
+            "feature": "spread_std",
+            "importance": 0.011178791516993625
+        },
+        {
+            "feature": "spread_min",
+            "importance": 0.010721575452718306
+        },
+        {
+            "feature": "spread_min_5",
+            "importance": 0.00922861280282172
+        },
+        {
+            "feature": "spread_ema_26",
+            "importance": 0.00856880801107657
+        },
+        {
+            "feature": "bohai_port_rail_inflow",
+            "importance": 0.008522864645027179
+        },
+        {
+            "feature": "J_ma_10",
+            "importance": 0.008327082692899033
+        },
+        {
+            "feature": "spread_max_5",
+            "importance": 0.008292575855831322
+        },
+        {
+            "feature": "spread_min_20",
+            "importance": 0.008236315669173532
+        },
+        {
+            "feature": "spread_percentile",
+            "importance": 0.0070717762888554735
+        },
+        {
+            "feature": "spread_mean",
+            "importance": 0.006964374766438589
+        },
+        {
+            "feature": "spread_ma_5",
+            "importance": 0.006917943398209551
+        },
+        {
+            "feature": "spread_ma_20",
+            "importance": 0.005966344371917361
+        },
+        {
+            "feature": "spread_ema_12",
+            "importance": 0.005569862141541744
+        },
+        {
+            "feature": "spread_ma_10",
+            "importance": 0.005399090932505445
+        },
+        {
+            "feature": "spread_max",
+            "importance": 0.004545968448118824
+        },
+        {
+            "feature": "spread_max_20",
+            "importance": 0.004431313394177042
+        },
+        {
+            "feature": "spread_min_10",
+            "importance": 0.00341776693654437
+        },
+        {
+            "feature": "coking_coal_warehouse_receipt",
+            "importance": 0.001626990216573913
+        }
+    ]
+}

@@ -1,0 +1,49 @@
+{
+    "run_timestamp": "20251103_164830",
+    "model_parameters": {
+        "model_type": "gradient_boosting",
+        "task": "regression",
+        "n_estimators": 500,
+        "max_depth": 8,
+        "learning_rate": 0.1,
+        "random_state": 42,
+        "scaler_used": true,
+        "feature_count": 50
+    },
+    "signal_parameters": {
+        "use_rolling_quantile": true,
+        "rolling_window": 250,
+        "upper_quantile": 0.8,
+        "lower_quantile": 0.2,
+        "signal_holding_days": 10,
+        "use_probability": true
+    },
+    "backtest_parameters": {
+        "initial_capital": 1000000,
+        "commission_rate": 0.0005,
+        "slippage_rate": 0.0001,
+        "max_position": 100000,
+        "max_capital_usage": 0.3
+    },
+    "data_information": {
+        "start_date": "2000-01-01",
+        "end_date": "2025-11-03",
+        "symbols": [
+            "JM",
+            "J"
+        ],
+        "spread_type": "Coking_Profit",
+        "train_samples": 2331,
+        "test_samples": 583,
+        "train_period": "2013-10-17 16:00:00 to 2023-05-21 16:00:00",
+        "test_period": "2023-05-22 16:00:00 to 2025-10-16 16:00:00",
+        "total_features": 50,
+        "feature_categories": {
+            "spread_features": 29,
+            "price_features": 10,
+            "technical_features": 0,
+            "macro_features": 1,
+            "fundamental_features": 8
+        }
+    }
+}

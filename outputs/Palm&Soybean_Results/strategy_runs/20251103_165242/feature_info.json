@@ -1,0 +1,257 @@
+{
+    "selected_features": [
+        "P_volume_ma_20",
+        "Y_volume_ma_20",
+        "P_ma_5",
+        "P_ma_10",
+        "P_ma_20",
+        "P_ma_50",
+        "Y_ma_5",
+        "Y_ma_10",
+        "Y_ma_20",
+        "Y_ma_50",
+        "spread_min_60",
+        "spread_min",
+        "spread_min_20",
+        "spread_min_10",
+        "spread_min_5",
+        "spread",
+        "spread_ma_5",
+        "spread_ma_10",
+        "spread_ema_12",
+        "spread_mean",
+        "spread_ma_20",
+        "spread_max_5",
+        "spread_max_10",
+        "spread_ema_26",
+        "spread_max",
+        "spread_max_20",
+        "spread_max_60",
+        "spread_ma_60",
+        "spread_diff_20d",
+        "distance_to_low",
+        "spread_diff_10d",
+        "distance_to_high",
+        "spread_diff_5d",
+        "spread_std_60",
+        "soybean_port_inventory_ma20",
+        "soybean_port_inventory",
+        "spread_std",
+        "spread_std_20",
+        "spread_diff_1d",
+        "spread_std_10",
+        "spread_macd",
+        "spread_std_5",
+        "spread_percentile",
+        "palm_oil_port_inventory",
+        "palm_oil_port_inventory_ma20",
+        "soybean_oil_port_inventory",
+        "soybean_oil_port_inventory_ma20",
+        "spread_return_20d",
+        "VIX_close",
+        "DXY_close"
+    ],
+    "feature_count": 50,
+    "feature_importance": [
+        {
+            "feature": "Y_ma_10",
+            "importance": 0.13195280996532832
+        },
+        {
+            "feature": "spread_diff_1d",
+            "importance": 0.07191468145279879
+        },
+        {
+            "feature": "spread_max_10",
+            "importance": 0.04896367337652366
+        },
+        {
+            "feature": "palm_oil_port_inventory_ma20",
+            "importance": 0.03796414916227513
+        },
+        {
+            "feature": "Y_ma_50",
+            "importance": 0.03740536876268189
+        },
+        {
+            "feature": "soybean_port_inventory_ma20",
+            "importance": 0.03605652717885579
+        },
+        {
+            "feature": "P_ma_20",
+            "importance": 0.03566247527491302
+        },
+        {
+            "feature": "Y_volume_ma_20",
+            "importance": 0.034097216561438756
+        },
+        {
+            "feature": "spread_macd",
+            "importance": 0.03362572130063493
+        },
+        {
+            "feature": "P_ma_50",
+            "importance": 0.02906901885177585
+        },
+        {
+            "feature": "spread",
+            "importance": 0.026589936112532072
+        },
+        {
+            "feature": "spread_ema_26",
+            "importance": 0.025839564409448672
+        },
+        {
+            "feature": "palm_oil_port_inventory",
+            "importance": 0.02390371576229918
+        },
+        {
+            "feature": "P_volume_ma_20",
+            "importance": 0.022727118644402248
+        },
+        {
+            "feature": "soybean_oil_port_inventory_ma20",
+            "importance": 0.021816462647945848
+        },
+        {
+            "feature": "VIX_close",
+            "importance": 0.020752329791641225
+        },
+        {
+            "feature": "spread_std_60",
+            "importance": 0.02004476874768268
+        },
+        {
+            "feature": "spread_diff_5d",
+            "importance": 0.019162435564942546
+        },
+        {
+            "feature": "DXY_close",
+            "importance": 0.018777174448783872
+        },
+        {
+            "feature": "distance_to_low",
+            "importance": 0.018059441396432473
+        },
+        {
+            "feature": "spread_ma_60",
+            "importance": 0.01738837286539102
+        },
+        {
+            "feature": "soybean_oil_port_inventory",
+            "importance": 0.01626872627982053
+        },
+        {
+            "feature": "spread_max_60",
+            "importance": 0.015063046517793072
+        },
+        {
+            "feature": "soybean_port_inventory",
+            "importance": 0.014998086649245622
+        },
+        {
+            "feature": "spread_std",
+            "importance": 0.013589743011804017
+        },
+        {
+            "feature": "spread_max_5",
+            "importance": 0.012926112740846792
+        },
+        {
+            "feature": "spread_std_10",
+            "importance": 0.01282354620000773
+        },
+        {
+            "feature": "Y_ma_20",
+            "importance": 0.01273637951534234
+        },
+        {
+            "feature": "spread_std_20",
+            "importance": 0.012668291286465188
+        },
+        {
+            "feature": "spread_ema_12",
+            "importance": 0.011832943584783784
+        },
+        {
+            "feature": "spread_diff_20d",
+            "importance": 0.011691980094860156
+        },
+        {
+            "feature": "spread_std_5",
+            "importance": 0.011226374981708396
+        },
+        {
+            "feature": "spread_return_20d",
+            "importance": 0.01055975095095818
+        },
+        {
+            "feature": "spread_diff_10d",
+            "importance": 0.010498818080807354
+        },
+        {
+            "feature": "spread_min_60",
+            "importance": 0.010227714702337104
+        },
+        {
+            "feature": "spread_ma_10",
+            "importance": 0.008525256011441412
+        },
+        {
+            "feature": "P_ma_10",
+            "importance": 0.008403960977465473
+        },
+        {
+            "feature": "spread_mean",
+            "importance": 0.007658497092421253
+        },
+        {
+            "feature": "distance_to_high",
+            "importance": 0.007406047765195757
+        },
+        {
+            "feature": "spread_min_5",
+            "importance": 0.007271375449497404
+        },
+        {
+            "feature": "spread_min",
+            "importance": 0.007025541232022597
+        },
+        {
+            "feature": "Y_ma_5",
+            "importance": 0.006810647057661997
+        },
+        {
+            "feature": "spread_min_10",
+            "importance": 0.006287746763711208
+        },
+        {
+            "feature": "spread_min_20",
+            "importance": 0.005877610046147787
+        },
+        {
+            "feature": "spread_ma_20",
+            "importance": 0.005762902871769724
+        },
+        {
+            "feature": "spread_ma_5",
+            "importance": 0.005406146705513761
+        },
+        {
+            "feature": "P_ma_5",
+            "importance": 0.004939704933463923
+        },
+        {
+            "feature": "spread_percentile",
+            "importance": 0.00449240827449984
+        },
+        {
+            "feature": "spread_max",
+            "importance": 0.0030719071916521738
+        },
+        {
+            "feature": "spread_max_20",
+            "importance": 0.0021757707520275006
+        }
+    ]
+}
