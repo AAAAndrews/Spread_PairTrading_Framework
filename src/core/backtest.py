@@ -32,7 +32,9 @@ class BacktestEngine:
                  max_position: int = 100,
                  leverage: float = 10.0,
                  margin_ratio: float = 0.1,
-                 max_capital_usage: float = 0.8):
+                 max_capital_usage: float = 0.8,
+                 stop_loss_pct: float = 0.0,
+                 stop_loss_amount: float = 0.0):
         """
         初始化回测引擎
         
@@ -44,12 +46,20 @@ class BacktestEngine:
             leverage: 杠杆倍数（如10表示10倍杠杆）
             margin_ratio: 保证金比例（如0.1表示10%保证金）
             max_capital_usage: 最大资金使用率（如0.8表示最多使用80%资金开仓）
+            stop_loss_pct: 单笔交易止损百分比（如0.05表示5%，0表示不启用）
+            stop_loss_amount: 单笔交易止损金额（如5000表示亏损5000元止损，0表示不启用）
         
         杠杆说明：
             - leverage=1: 无杠杆，相当于股票交易
             - leverage=10: 10倍杠杆，10万资金可控制100万价值的合约
             - 实际占用保证金 = 合约价值 × margin_ratio
             - 可开仓价值 = 可用资金 × leverage
+        
+        止损说明：
+            - 同时设置百分比和金额时，先触发哪个就执行哪个
+            - stop_loss_pct: 基于开仓价的跌幅，如5%表示价格下跌5%触发止损
+            - stop_loss_amount: 基于绝对金额的亏损，如5000表示亏损5000元触发止损
+            - 止损仅对持仓生效，开仓时重置止损计数
         """
         self.initial_capital = initial_capital
         self.commission_rate = commission_rate
@@ -60,6 +70,11 @@ class BacktestEngine:
         self.leverage = leverage
         self.margin_ratio = margin_ratio
         self.max_capital_usage = max_capital_usage
+        
+        # ✅ 止损相关参数
+        self.stop_loss_pct = stop_loss_pct
+        self.stop_loss_amount = stop_loss_amount
+        self.stop_loss_triggered_count = 0  # 止损触发次数统计
         
         # 回测状态
         self.capital = initial_capital
@@ -78,6 +93,7 @@ class BacktestEngine:
         self.margin_used = 0.0
         self.position = 0
         self.entry_price = 0.0
+        self.stop_loss_triggered_count = 0
         self.trades = []
         self.equity_curve = []
         self.returns = []
@@ -120,6 +136,60 @@ class BacktestEngine:
         contract_value = abs(price * quantity)
         margin = contract_value * self.margin_ratio
         return margin
+    
+    def check_stop_loss(self, current_price: float) -> bool:
+        """
+        检查是否触发止损
+        
+        Args:
+            current_price: 当前价格
+        
+        Returns:
+            是否触发止损
+        
+        止损逻辑：
+            1. 如果没有持仓，返回False
+            2. 计算当前浮动盈亏
+            3. 检查百分比止损（如果设置）
+            4. 检查金额止损（如果设置）
+            5. 任一条件触发则返回True
+        """
+        # 没有持仓，无需止损
+        if self.position == 0 or self.entry_price == 0:
+            return False
+        
+        # 没有设置止损参数，不启用止损
+        if self.stop_loss_pct <= 0 and self.stop_loss_amount <= 0:
+            return False
+        
+        # 计算当前浮动盈亏
+        if self.position > 0:  # 多头
+            unrealized_pnl = (current_price - self.entry_price) * self.position
+            price_change_pct = (current_price - self.entry_price) / self.entry_price
+        else:  # 空头
+            unrealized_pnl = (self.entry_price - current_price) * abs(self.position)
+            price_change_pct = (self.entry_price - current_price) / self.entry_price
+        
+        # 检查百分比止损
+        if self.stop_loss_pct > 0:
+            if price_change_pct <= -self.stop_loss_pct:
+                logger.warning(
+                    f"触发百分比止损！当前亏损: {price_change_pct*100:.2f}% "
+                    f"(止损线: {self.stop_loss_pct*100:.2f}%), "
+                    f"浮亏: ${unrealized_pnl:,.2f}"
+                )
+                return True
+        
+        # 检查金额止损
+        if self.stop_loss_amount > 0:
+            if unrealized_pnl <= -self.stop_loss_amount:
+                logger.warning(
+                    f"触发金额止损！当前亏损: ${unrealized_pnl:,.2f} "
+                    f"(止损线: ${self.stop_loss_amount:,.2f})"
+                )
+                return True
+        
+        return False
     
     def calculate_max_position_size(self, price: float) -> int:
         """
@@ -365,6 +435,12 @@ class BacktestEngine:
         logger.info(f"保证金比例: {self.margin_ratio * 100:.1f}%")
         logger.info(f"最大资金使用率: {self.max_capital_usage * 100:.0f}%")
         
+        # ✅ 止损参数日志
+        if self.stop_loss_pct > 0:
+            logger.info(f"百分比止损: {self.stop_loss_pct * 100:.1f}%")
+        if self.stop_loss_amount > 0:
+            logger.info(f"金额止损: ${self.stop_loss_amount:,.2f}")
+        
         # 合并价格和信号
         data = price_data[[price_col]].join(signals[['signal']], how='inner')
         
@@ -381,6 +457,15 @@ class BacktestEngine:
             price = row[price_col]
             signal = int(row['signal'])
             volatility = row['volatility'] if not pd.isna(row['volatility']) else 0.01
+            
+            # ✅ 检查止损（在执行交易前）
+            if self.check_stop_loss(price):
+                logger.warning(f"{timestamp}: 触发止损，强制平仓")
+                self.execute_trade(timestamp, 0, price, volatility)
+                self.stop_loss_triggered_count += 1
+                # 更新权益
+                self.update_equity(timestamp, price)
+                continue  # 跳过本次信号执行
             
             # 执行交易
             self.execute_trade(timestamp, signal, price, volatility)
@@ -401,6 +486,10 @@ class BacktestEngine:
         
         logger.info(f"回测完成，共执行 {len(self.trades)} 笔交易")
         logger.info(f"最终权益: ${results_df['equity'].iloc[-1]:,.2f}")
+        
+        # ✅ 止损统计
+        if self.stop_loss_triggered_count > 0:
+            logger.info(f"⚠️  止损触发次数: {self.stop_loss_triggered_count}")
         
         return results_df
     
@@ -444,6 +533,20 @@ class BacktestEngine:
             'peak_margin_usage_rate': equity_df['margin_usage_rate'].max(),
             'avg_margin_usage_rate': equity_df['margin_usage_rate'].mean(),
             'peak_leverage_ratio': equity_df['leverage_ratio'].max() if 'leverage_ratio' in equity_df else 0.0
+        }
+    
+    def get_stop_loss_stats(self) -> Dict:
+        """
+        获取止损统计
+        
+        Returns:
+            止损统计字典
+        """
+        return {
+            'stop_loss_pct': self.stop_loss_pct,
+            'stop_loss_amount': self.stop_loss_amount,
+            'stop_loss_triggered_count': self.stop_loss_triggered_count,
+            'stop_loss_enabled': self.stop_loss_pct > 0 or self.stop_loss_amount > 0
         }
 
 

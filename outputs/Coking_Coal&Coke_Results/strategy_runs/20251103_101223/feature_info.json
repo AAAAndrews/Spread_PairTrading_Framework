@@ -1,0 +1,257 @@
+{
+    "selected_features": [
+        "J_price_to_ma_50",
+        "J_return_20d",
+        "spread_zscore_60",
+        "J_price_to_ma_20",
+        "spread_diff_5d",
+        "spread_diff_10d",
+        "spread_skew_20",
+        "spread_diff_20d",
+        "spread_zscore",
+        "spread_zscore_20",
+        "J_return_10d",
+        "spread_position_60",
+        "spread_macd",
+        "spread_zscore_10",
+        "spread_percentile",
+        "distance_to_high",
+        "JM_price_to_ma_50",
+        "distance_to_low",
+        "J_price_to_ma_10",
+        "spread_ma_60",
+        "spread_zscore_5",
+        "spread_position_10",
+        "spread_diff_1d",
+        "spread_position_20",
+        "JM_return_20d",
+        "spread_min_60",
+        "bohai_port_inventory",
+        "spread_skew_60",
+        "spread_position_5",
+        "bohai_port_inventory_ma20",
+        "J_return_5d",
+        "spread_std_60",
+        "coke_warehouse_receipt_ma20",
+        "JM_ma_5",
+        "JM_ma_10",
+        "spread_std_5",
+        "spread_mean",
+        "spread_ma_20",
+        "J_ma_5",
+        "J_price_to_ma_5",
+        "spread_ema_26",
+        "J_volatility_20",
+        "JM_ma_20",
+        "J_volatility_10",
+        "J_ma_10",
+        "coking_coal_warehouse_receipt_ma20",
+        "spread_max",
+        "spread_max_20",
+        "VIX_close",
+        "J_return_1d"
+    ],
+    "feature_count": 50,
+    "feature_importance": [
+        {
+            "feature": "bohai_port_inventory_ma20",
+            "importance": 0.06129195291410916
+        },
+        {
+            "feature": "J_ma_10",
+            "importance": 0.05179690156786431
+        },
+        {
+            "feature": "JM_ma_5",
+            "importance": 0.047986444940322975
+        },
+        {
+            "feature": "J_volatility_20",
+            "importance": 0.046434767049519425
+        },
+        {
+            "feature": "spread_zscore_60",
+            "importance": 0.045827815775055965
+        },
+        {
+            "feature": "spread_skew_60",
+            "importance": 0.040665222676141075
+        },
+        {
+            "feature": "spread_std_60",
+            "importance": 0.03808176244994782
+        },
+        {
+            "feature": "spread_ma_60",
+            "importance": 0.03754154982617401
+        },
+        {
+            "feature": "J_price_to_ma_50",
+            "importance": 0.036064266120423724
+        },
+        {
+            "feature": "coke_warehouse_receipt_ma20",
+            "importance": 0.03578366848795602
+        },
+        {
+            "feature": "VIX_close",
+            "importance": 0.02959523034305327
+        },
+        {
+            "feature": "J_ma_5",
+            "importance": 0.02797089802205806
+        },
+        {
+            "feature": "spread_min_60",
+            "importance": 0.027489729824600653
+        },
+        {
+            "feature": "distance_to_high",
+            "importance": 0.026617632131697152
+        },
+        {
+            "feature": "JM_price_to_ma_50",
+            "importance": 0.025873172899614785
+        },
+        {
+            "feature": "spread_max",
+            "importance": 0.025739785485951256
+        },
+        {
+            "feature": "JM_ma_20",
+            "importance": 0.02479338183443677
+        },
+        {
+            "feature": "spread_macd",
+            "importance": 0.024484247792583277
+        },
+        {
+            "feature": "J_volatility_10",
+            "importance": 0.023849826274253052
+        },
+        {
+            "feature": "spread_skew_20",
+            "importance": 0.022984927005739057
+        },
+        {
+            "feature": "spread_position_60",
+            "importance": 0.02122563166272514
+        },
+        {
+            "feature": "coking_coal_warehouse_receipt_ma20",
+            "importance": 0.018032230387281554
+        },
+        {
+            "feature": "spread_ema_26",
+            "importance": 0.0173809663213119
+        },
+        {
+            "feature": "spread_ma_20",
+            "importance": 0.017318895132080455
+        },
+        {
+            "feature": "JM_ma_10",
+            "importance": 0.01718158460529345
+        },
+        {
+            "feature": "bohai_port_inventory",
+            "importance": 0.016944238475865826
+        },
+        {
+            "feature": "spread_diff_5d",
+            "importance": 0.015537967322053108
+        },
+        {
+            "feature": "JM_return_20d",
+            "importance": 0.015534382099394629
+        },
+        {
+            "feature": "spread_max_20",
+            "importance": 0.015103809027681636
+        },
+        {
+            "feature": "spread_diff_10d",
+            "importance": 0.013187242191817362
+        },
+        {
+            "feature": "spread_diff_20d",
+            "importance": 0.01314545161010788
+        },
+        {
+            "feature": "distance_to_low",
+            "importance": 0.01243606969767763
+        },
+        {
+            "feature": "spread_std_5",
+            "importance": 0.010581892005553494
+        },
+        {
+            "feature": "J_price_to_ma_20",
+            "importance": 0.009412530278919057
+        },
+        {
+            "feature": "spread_diff_1d",
+            "importance": 0.00923014456810608
+        },
+        {
+            "feature": "spread_zscore",
+            "importance": 0.007689622876904384
+        },
+        {
+            "feature": "J_return_5d",
+            "importance": 0.0067105231633067496
+        },
+        {
+            "feature": "spread_mean",
+            "importance": 0.00658546920300556
+        },
+        {
+            "feature": "J_return_20d",
+            "importance": 0.006526462557766235
+        },
+        {
+            "feature": "spread_zscore_20",
+            "importance": 0.006473971066174138
+        },
+        {
+            "feature": "spread_zscore_10",
+            "importance": 0.006341636479037461
+        },
+        {
+            "feature": "spread_zscore_5",
+            "importance": 0.005310885470575652
+        },
+        {
+            "feature": "spread_position_10",
+            "importance": 0.004990702280960755
+        },
+        {
+            "feature": "spread_position_20",
+            "importance": 0.004733976708242062
+        },
+        {
+            "feature": "J_return_10d",
+            "importance": 0.004628865619755202
+        },
+        {
+            "feature": "J_price_to_ma_10",
+            "importance": 0.0046274508385303545
+        },
+        {
+            "feature": "J_price_to_ma_5",
+            "importance": 0.004382778289156398
+        },
+        {
+            "feature": "spread_percentile",
+            "importance": 0.0034902056450549267
+        },
+        {
+            "feature": "J_return_1d",
+            "importance": 0.002572019082567735
+        },
+        {
+            "feature": "spread_position_5",
+            "importance": 0.0018092119115914063
+        }
+    ]
+}

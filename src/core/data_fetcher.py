@@ -28,7 +28,14 @@ def data_normalizer(func: Callable) -> Callable:
         column_mapping = {
             'Open': 'open', 'High': 'high', 'Low': 'low', 'Close': 'close',
             'Volume': 'volume', 'Adj Close': 'adjusted_close',
-            'Open Interest': 'open_interest'
+            'Open Interest': 'open_interest',
+            "日期":"date",
+            "开盘价":"open",
+            "收盘价":"close",
+            "最高价":"high",
+            "最低价":"low",
+            "成交量":"volume",
+            "持仓量":"holding_volume"
         }
         
         df.rename(columns=column_mapping, inplace=True)
@@ -115,6 +122,9 @@ class DataFetcher:
             if market == 'CN':
                 # 获取国内期货主力合约数据
                 df = ak.futures_main_sina(symbol=symbol)
+                df["日期"] = pd.to_datetime(df["日期"])
+                if hasattr(df["日期"].dt, 'tz') and df["日期"].dt.tz is None:
+                    df["日期"] = df["日期"].dt.tz_localize('Asia/Shanghai')
             else:
                 logger.warning("akshare主要支持中国市场数据")
                 return pd.DataFrame()
