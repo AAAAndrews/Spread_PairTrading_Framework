@@ -1,13 +1,8 @@
 # 价差套利框架项目详细介绍 | Spread Arbitrage Framework - Detailed Introduction
 
 ## 重要提示 | Important Notice
-
-**中文：**
-如需通过 Git 拉取（pull）或克隆（clone）本项目，请联系 **e1538433@u.nus.edu** 获取私有仓库的访问权限。
-
-**English:**
-To pull or clone this project via Git, please contact **e1538433@u.nus.edu** to obtain access permissions for the private repository.
-
+---
+** The project now has been opened to public. We welcome all the advice and devotion for this project. **
 ---
 
 ## 项目背景与意义 | Project Background and Significance
@@ -205,6 +200,7 @@ When using the `select_features` function in the feature engineering module with
 
 **如有疑问，请联系 | For Questions, Please Contact:**
 e1538433@u.nus.edu
+
 
 ---
 
