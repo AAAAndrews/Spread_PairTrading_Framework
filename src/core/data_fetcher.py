@@ -140,35 +140,148 @@ class DataFetcher:
             logger.error(f"获取akshare数据失败: {e}")
             return pd.DataFrame()
     
-    def fetch_eia_data(self, series_id: str, api_key: Optional[str] = None) -> pd.DataFrame:
+    def fetch_eia_data(self, series_id: str, api_key: str = "O8N0mhrHyhUV3pg6qus3cSZ62EMYteG4Ar2SvgAc") -> pd.DataFrame:
         """
-        获取EIA数据
+        使用EIA Python Library获取EIA数据
         
         Args:
-            series_id: EIA序列ID
-            api_key: API密钥（可选）
+            series_id: EIA序列ID，例如:
+                - 'PET.WCRSTUS1.W': 美国原油库存（周度）
+                - 'PET.WGTSTUS1.W': 美国汽油库存（周度）
+                - 'PET.WDISTUS1.W': 美国馏分油库存（周度）
+                - 'PET.RWTC.D': WTI原油现货价格（日度）
+            api_key: EIA API密钥
         
         Returns:
-            DataFrame
+            DataFrame，包含时间序列数据
         """
         try:
-            # 注意：实际使用时需要EIA API密钥
-            logger.warning("EIA数据获取需要API密钥，这里返回示例数据")
+            import requests
             
-            # 示例：创建模拟EIA数据
-            dates = pd.date_range(start='2020-01-01', end='2024-01-01', freq='W')
-            data = {
-                'crude_oil_stock': np.random.normal(420, 20, len(dates)),
-                'gasoline_stock': np.random.normal(230, 15, len(dates)),
-                'distillate_stock': np.random.normal(130, 10, len(dates))
+            logger.info(f"正在从EIA获取数据，序列ID: {series_id}")
+            
+            # 使用EIA v2 API（更稳定）
+            url = f"https://api.eia.gov/v2/seriesid/{series_id}"
+            params = {
+                'api_key': api_key
             }
-            df = pd.DataFrame(data, index=dates)
-            df.index = df.index.tz_localize('UTC')
+            
+            response = requests.get(url, params=params)
+            
+            if response.status_code != 200:
+                logger.error(f"EIA API请求失败，状态码: {response.status_code}")
+                logger.error(f"响应内容: {response.text}")
+                return pd.DataFrame()
+            
+            data_json = response.json()
+            
+            # 解析响应数据
+            if 'response' not in data_json:
+                logger.warning(f"未找到数据，尝试使用v1 API")
+                # 尝试使用v1 API
+                return self._fetch_eia_data_v1(series_id, api_key)
+            
+            if 'data' not in data_json['response']:
+                logger.warning(f"序列 {series_id} 没有可用数据")
+                return pd.DataFrame()
+            
+            data_list = data_json['response']['data']
+            
+            if not data_list:
+                logger.warning(f"序列 {series_id} 返回空数据")
+                return pd.DataFrame()
+            
+            # 转换为DataFrame
+            df = pd.DataFrame(data_list)
+            
+            # 查找日期列和数值列
+            date_col = None
+            value_col = None
+            
+            for col in df.columns:
+                if 'period' in col.lower() or 'date' in col.lower():
+                    date_col = col
+                if 'value' in col.lower():
+                    value_col = col
+            
+            if date_col is None or value_col is None:
+                logger.error(f"无法识别数据列，可用列: {df.columns.tolist()}")
+                return pd.DataFrame()
+            
+            # 处理日期和数值
+            df['date'] = pd.to_datetime(df[date_col])
+            df['value'] = pd.to_numeric(df[value_col], errors='coerce')
+            
+            # 设置索引并排序
+            df = df[['date', 'value']].copy()
+            df.set_index('date', inplace=True)
+            df.sort_index(inplace=True)
+            
+            # 添加时区信息
+            if df.index.tz is None:
+                df.index = df.index.tz_localize('UTC')
+            
+            logger.info(f"成功获取 {len(df)} 条EIA数据，时间范围: {df.index.min()} 至 {df.index.max()}")
+            
+            return df
+            
+        except ImportError as e:
+            logger.error(f"缺少必要的库: {e}")
+            return pd.DataFrame()
+        except Exception as e:
+            logger.error(f"获取EIA数据失败: {e}")
+            import traceback
+            logger.debug(traceback.format_exc())
+            return pd.DataFrame()
+    
+    def _fetch_eia_data_v1(self, series_id: str, api_key: str) -> pd.DataFrame:
+        """
+        使用EIA v1 API获取数据（备用方法）
+        """
+        try:
+            import requests
+            
+            url = "https://api.eia.gov/series/"
+            params = {
+                'api_key': api_key,
+                'series_id': series_id
+            }
+            
+            response = requests.get(url, params=params)
+            
+            if response.status_code != 200:
+                logger.error(f"EIA v1 API请求失败，状态码: {response.status_code}")
+                return pd.DataFrame()
+            
+            data_json = response.json()
+            
+            if 'series' not in data_json or not data_json['series']:
+                logger.warning(f"v1 API未返回数据")
+                return pd.DataFrame()
+            
+            series_data = data_json['series'][0]
+            data_list = series_data.get('data', [])
+            
+            if not data_list:
+                return pd.DataFrame()
+            
+            # 转换为DataFrame
+            df = pd.DataFrame(data_list, columns=['date', 'value'])
+            df['date'] = pd.to_datetime(df['date'])
+            df['value'] = pd.to_numeric(df['value'], errors='coerce')
+            
+            df.set_index('date', inplace=True)
+            df.sort_index(inplace=True)
+            
+            if df.index.tz is None:
+                df.index = df.index.tz_localize('UTC')
+            
+            logger.info(f"通过v1 API成功获取 {len(df)} 条数据")
             
             return df
             
         except Exception as e:
-            logger.error(f"获取EIA数据失败: {e}")
+            logger.error(f"v1 API获取失败: {e}")
             return pd.DataFrame()
     
     def fetch_cot_data(self) -> pd.DataFrame:

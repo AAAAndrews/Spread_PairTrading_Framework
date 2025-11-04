@@ -1,0 +1,58 @@
+
+## 重要提示 | Important Notice
+
+**中文：**
+如需通过 Git 拉取（pull）或克隆（clone）本项目，请联系 **e1538433@u.nus.edu** 获取私有仓库的访问权限。
+
+**English:**
+To pull or clone this project via Git, please contact **e1538433@u.nus.edu** to obtain access permissions for the private repository.
+
+---
+
+
+### **数据类型错误问题 | Data Type Error Issue**
+
+**中文说明：**
+
+在使用特征工程模块的 `select_features` 函数时，当选择方法为 `'variance'`（方差选择）时，可能会遇到 `TypeError: Cannot use method 'nlargest' with dtype object` 错误。
+
+**问题根源：**
+- 该错误由数据框（DataFrame）中包含的字符串列引起
+- 具体来说，`spread_calculator.py` 文件中的 `calculate_spread` 函数在计算完价差后，会额外添加一个名为 `'spread_name'` 的字符串列，用于标识价差类型（例如 `'COKING_PROFIT'`）
+- 当特征工程模块尝试对所有特征列计算方差（variance）时，该字符串列无法进行数值计算，导致报错
+
+**特殊之处：**
+- 即使在包版本完全相同的情况下，该错误在不同计算机上的表现可能不一致
+- 某些环境可能会报错，而另一些环境则可以正常运行
+- 这可能与底层 NumPy 或 pandas 的行为细节有关，但具体原因尚未完全确定
+
+**临时解决方案：**
+- 在特征选择之前，从数据框中移除 `'spread_name'` 列或其他字符串类型的列
+- 修改 `calculate_spread` 函数，不在返回的数据框中包含 `'spread_name'` 列
+- 如果需要保留该信息，可以将其作为单独的变量返回，而不是混入特征数据框
+
+**English Explanation:**
+
+When using the `select_features` function in the feature engineering module with the method parameter set to `'variance'` (variance selection), you may encounter a `TypeError: Cannot use method 'nlargest' with dtype object` error.
+
+**Root Cause:**
+- This error is caused by string columns present in the DataFrame
+- Specifically, the `calculate_spread` function in `spread_calculator.py` adds an extra column named `'spread_name'` after calculating the spread, which contains string identifiers for the spread type (e.g., `'COKING_PROFIT'`)
+- When the feature engineering module attempts to calculate variance on all feature columns, this string column cannot be numerically processed, causing the error
+
+**Unusual Behavior:**
+- Even with identical package versions, this error may manifest inconsistently across different computers
+- Some environments may throw the error while others run normally
+- This is likely related to subtle behavioral differences in underlying NumPy or pandas implementations, though the exact cause remains undetermined
+
+**Temporary Solution:**
+- Remove the `'spread_name'` column or other string-type columns from the DataFrame before feature selection
+- Modify the `calculate_spread` function to exclude the `'spread_name'` column from the returned DataFrame
+- If this information needs to be preserved, return it as a separate variable rather than mixing it into the feature DataFrame
+
+**如有疑问，请联系 | For Questions, Please Contact:**
+e1538433@u.nus.edu
+
+
+To see other detailed infomation, please see the README.md file.
+其他细节详见README.md 
