@@ -2,11 +2,7 @@
 
 ## 重要提示 | Important Notice
 
-**中文：**
-如需通过 Git 拉取（pull）或克隆（clone）本项目，请联系 **e1538433@u.nus.edu** 获取私有仓库的访问权限。
-
-**English:**
-To pull or clone this project via Git, please contact **e1538433@u.nus.edu** to obtain access permissions for the private repository.
+** The project now has been opened to public. We welcome all the advice and devotion for this project. **
 
 ---
 
